@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Лабораторная работа № 6 - Основы JavaScript</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .task-card {
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .task-card h3 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+        .input-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        .input-group input {
+            width: 150px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .result-output {
+            font-weight: bold;
+            color: #007bff;
+            font-size: 1.05em;
+            min-height: 24px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Лабораторная работа № 6: Основы JavaScript</h1>
+    </header>
+
+    <main class="container">
+        <h2>Интерактивное тестирование функций JS</h2>
+
+        <div class="task-card">
+            <h3>1. Возведение в степень pow(x, n)</h3>
+            <div class="input-group">
+                <input type="number" id="pow-x" placeholder="Число x" value="2">
+                <input type="number" id="pow-n" placeholder="Степень n (нат.)" value="5" min="1">
+                <button class="btn" onclick="runPow()">Вычислить</button>
+            </div>
+            <div class="result-output" id="res-pow"></div>
+        </div>
+
+        <div class="task-card">
+            <h3>2. Наибольший общий делитель gcd(a, b)</h3>
+            <div class="input-group">
+                <input type="number" id="gcd-a" placeholder="Число a" value="48" min="0">
+                <input type="number" id="gcd-b" placeholder="Число b" value="18" min="0">
+                <button class="btn" onclick="runGcd()">Найти НОД</button>
+            </div>
+            <div class="result-output" id="res-gcd"></div>
+        </div>
+
+        <div class="task-card">
+            <h3>3. Наименьшая цифра числа minDigit(x)</h3>
+            <div class="input-group">
+                <input type="number" id="min-x" placeholder="Число x" value="58294" min="0">
+                <button class="btn" onclick="runMinDigit()">Найти цифру</button>
+            </div>
+            <div class="result-output" id="res-min"></div>
+        </div>
+
+        <div class="task-card">
+            <h3>4. Склонение слов pluralizeRecords(n)</h3>
+            <div class="input-group">
+                <input type="number" id="plur-n" placeholder="Количество n" value="21" min="0">
+                <button class="btn" onclick="runPluralize()">Сформировать строку</button>
+            </div>
+            <div class="result-output" id="res-plur"></div>
+        </div>
+
+        <div class="task-card">
+            <h3>5. Числа Фибоначчи fibb(n) (до n &le; 1000)</h3>
+            <div class="input-group">
+                <input type="number" id="fibb-n" placeholder="Номер n" value="10" min="0" max="1000">
+                <button class="btn" onclick="runFibb()">Вычислить число</button>
+            </div>
+            <div class="result-output" id="res-fibb"></div>
+        </div>
+    </main>
+
+    <footer>
+        <p>Выполнение практических алгоритмов на JavaScript</p>
+    </footer>
+
+    <script>
+        function pow(x, n) {
+            if (n < 1 || !Number.isInteger(n)) {
+                return "Ошибка: степень n должна быть натуральным числом (1, 2, 3...)";
+            }
+            let result = 1;
+            for (let i = 0; i < n; i++) {
+                result *= x;
+            }
+            return result;
+        }
+
+        function gcd(a, b) {
+            if (a < 0 || b < 0 || !Number.isInteger(a) || !Number.isInteger(b)) {
+                return "Ошибка: числа должны быть целыми и неотрицательными";
+            }
+            while (b !== 0) {
+                let temp = b;
+                b = a % b;
+                a = temp;
+            }
+            return a;
+        }
+
+        function minDigit(x) {
+            if (x < 0 || !Number.isInteger(x)) {
+                return "Ошибка: введите целое неотрицательное число";
+            }
+            let digits = String(x).split('').map(Number);
+            let min = digits[0];
+            for (let i = 1; i < digits.length; i++) {
+                if (digits[i] < min) {
+                    min = digits[i];
+                }
+            }
+            return min;
+        }
+
+        function pluralizeRecords(n) {
+            if (n < 0 || !Number.isInteger(n)) {
+                return "Ошибка: введите целое неотрицательное число";
+            }
+            let lastTwo = n % 100;
+            let lastOne = n % 10;
+            
+            let wordWas = "было";
+            let wordFound = "найдено";
+            let wordRecord = "записей";
+
+            if (lastOne === 1 && lastTwo !== 11) {
+                wordWas = "была";
+                wordFound = "найдена";
+                wordRecord = "запись";
+            } 
+            else if (lastOne >= 2 && lastOne <= 4 && (lastTwo < 12 || lastTwo > 14)) {
+                wordWas = "было";
+                wordFound = "найдено";
+                wordRecord = "записи";
+            }
+
+            return `В результате выполнения запроса ${wordWas} ${wordFound} ${n} ${wordRecord}`;
+        }
+
+        function fibb(n) {
+            if (n < 0 || n > 1000 || !Number.isInteger(n)) {
+                return "Ошибка: n должно быть целым числом от 0 до 1000";
+            }
+            if (n === 0) return 0;
+            if (n === 1) return 1;
+
+            let prev = 0n;
+            let curr = 1n;
+
+            for (let i = 2; i <= n; i++) {
+                let next = prev + curr;
+                prev = curr;
+                curr = next;
+            }
+            return curr.toString();
+        }
+
+
+        function runPow() {
+            let x = Number(document.getElementById('pow-x').value);
+            let n = Number(document.getElementById('pow-n').value);
+            document.getElementById('res-pow').textContent = "Результат: " + pow(x, n);
+        }
+
+        function runGcd() {
+            let a = Number(document.getElementById('gcd-a').value);
+            let b = Number(document.getElementById('gcd-b').value);
+            document.getElementById('res-gcd').textContent = "Наибольший общий делитель: " + gcd(a, b);
+        }
+
+        function runMinDigit() {
+            let x = Number(document.getElementById('min-x').value);
+            document.getElementById('res-min').textContent = "Наименьшая цифра: " + minDigit(x);
+        }
+
+        function runPluralize() {
+            let n = Number(document.getElementById('plur-n').value);
+            document.getElementById('res-plur').textContent = pluralizeRecords(n);
+        }
+
+        function runFibb() {
+            let n = Number(document.getElementById('fibb-n').value);
+            document.getElementById('res-fibb').textContent = `F(${n}) = ` + fibb(n);
+        }
+
+        window.onload = function() {
+            runPow();
+            runGcd();
+            runMinDigit();
+            runPluralize();
+            runFibb();
+        };
+    </script>
+</body>
+</html>
